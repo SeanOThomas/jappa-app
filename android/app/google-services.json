@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "960177781712",
+    "firebase_url": "https://jaap-799fd.firebaseio.com",
+    "project_id": "jaap-799fd",
+    "storage_bucket": "jaap-799fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960177781712:android:95648372c6871ca7",
+        "android_client_info": {
+          "package_name": "com.seanthomas.jaap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "960177781712-75bm0elrscde924gvcfoa9nldnd2oblk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA4SHzvb-NDUY0Z75AHvMViULzW7mycRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "960177781712-75bm0elrscde924gvcfoa9nldnd2oblk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
