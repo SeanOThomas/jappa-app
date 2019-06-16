@@ -23,7 +23,6 @@ class RemoteService {
     print('feching med list...');
     return _fetchMeditationList().then((snapshot) async {
       MeditationList medList = MeditationList.fromJson(snapshot.data);
-      print('fetched list, num meds: ${medList.meditations.length}');
 
       // determine what we should fetch based on remote version against
       // local version.
@@ -61,13 +60,15 @@ class RemoteService {
       [Future<void> introMedFuture]) async {
     final futures = List<Future<void>>();
     if (introMedFuture != null) {
+      // eg "intro_med.mp3"
       futures.add(introMedFuture);
     }
     for (final m in meditationList.meditations) {
-      print('fetching files for ${m.title}...');
+      // eg "1/desc.mp3"
       futures.add(_fetchFile(_plusFileExt('${m.key}/$FILE_NAME_DESCRIPTION')));
-      for (var i = 1; i <= meditationList.meditations.length; i++) {
-        futures.add(_fetchFile(_plusFileExt('$i/$FILE_NAME_REMINDER')));
+      for (var i = 1; i <= m.numReminders; i++) {
+        // eg "1/rem3.mp3
+        futures.add(_fetchFile(_plusFileExt('${m.key}/$FILE_NAME_REMINDER$i')));
       }
     }
     return Future.wait(futures);
@@ -77,13 +78,13 @@ class RemoteService {
 
   /// Fetches a remote file and saves it to private app storage.
   ///
-  /// Takes  a file name, eg "intro_meditation.mp3",  "1/description.mp3" or
-  /// "1/reminder1.mp3"
+  /// Takes  a file name, eg "intro_med.mp3",  "1/desc.mp3" or
+  /// "1/rem3.mp3"
   Future<void> _fetchFile(String fileName) async {
     StorageReference ref = _storage.ref().child(fileName);
-
+    print('fetching fileName: $fileName');
     final storageFile = await _getAppStorageFile(fileName);
-
+    print('storage file: ${storageFile.path}');
     StorageFileDownloadTask downloadTask = ref.writeToFile(storageFile);
     downloadTask.future.then((snap) {
       print("fetched $fileName with  byte count: ${snap.totalByteCount}");
@@ -94,11 +95,11 @@ class RemoteService {
 
   /// Gets a file in private app storage.
   ///
-  /// Takes  a file name, eg "intro_meditation.mp3",  "1/description.mp3" or
-  /// "1/reminder1.mp3"
+  /// Takes  a file name, eg "intro_med.mp3",  "1/desc.mp3" or
+  /// "1/rem3.mp3"
   Future<File> _getAppStorageFile(String fileName) async {
     final path = await _getAppStoragePath();
-    File file = File('$path/$fileName');
+    File file = await File('$path/$fileName').create(recursive: true);
 
     print('local dir path: ${file.path}');
     return File('$path/$fileName');
@@ -107,8 +108,6 @@ class RemoteService {
   /// Get path to private app storage.
   Future<String> _getAppStoragePath() async {
     final dir = await getApplicationDocumentsDirectory();
-
-    print('dir path: ${dir.path}');
     return dir.path;
   }
 }
