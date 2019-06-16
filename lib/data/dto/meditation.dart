@@ -1,5 +1,5 @@
 class Meditation {
-  final int key;
+  final String key;
   final String title;
   final String description;
   final int numReminders;
