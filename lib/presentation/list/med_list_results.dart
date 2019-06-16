@@ -11,15 +11,15 @@ class MedListResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemBuilder: (context, index) => InkWell(
-              child: Card(
+        itemBuilder: (context, index) => Card(
+              child: InkWell(
                   child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Text(meditations[index].title),
-              )),
-              onTap: () {
-                print('${meditations[index].title} tapped');
-              },
+                    padding: const EdgeInsets.all(22.0),
+                    child: Text(meditations[index].title),
+                  ),
+                  onTap: () {
+                    print('${meditations[index].title} tapped');
+                  }),
             ),
         itemCount: meditations.length,
       ),
