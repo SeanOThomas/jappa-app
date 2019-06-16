@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jaap/data/dto/meditation.dart';
 
+import 'med_dialog.dart';
+
 class MedListResults extends StatelessWidget {
   final List<Meditation> meditations;
 
@@ -18,7 +20,10 @@ class MedListResults extends StatelessWidget {
                     child: Text(meditations[index].title),
                   ),
                   onTap: () {
-                    print('${meditations[index].title} tapped');
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            MedDialog(meditations[index]));
                   }),
             ),
         itemCount: meditations.length,
