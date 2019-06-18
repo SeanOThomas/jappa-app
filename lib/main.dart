@@ -3,6 +3,7 @@ import 'package:jaap/presentation/detail/med_detail_page.dart';
 import 'package:jaap/presentation/list/med_list_page.dart';
 import 'package:provider/provider.dart';
 
+import 'data/dto/meditation.dart';
 import 'domain/models/med_list_model.dart';
 import 'domain/state/med_list_state.dart';
 
@@ -12,9 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<MedListModel>.value(value: _provideListModel(Loading()))
-      ],
+      providers: [ChangeNotifierProvider<MedListModel>.value(value: _provideListModel(Loading()))],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
@@ -22,9 +21,17 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         initialRoute: MedListPage.ROUTE_NAME,
-        routes: {
-          MedListPage.ROUTE_NAME: (_) => MedListPage(),
-          MedDetailPage.ROUTE_NAME: (_) => MedDetailPage()
+        routes: {MedListPage.ROUTE_NAME: (_) => MedListPage(), MedDetailPage.ROUTE_NAME: (_) => MedDetailPage()},
+        onGenerateRoute: (settings) {
+          if (settings.name == MedDetailPage.ROUTE_NAME) {
+            return MaterialPageRoute(
+              builder: (context) {
+                return MedDetailPage(
+                  med: settings.arguments,
+                );
+              },
+            );
+          }
         },
       ),
     );
@@ -32,7 +39,7 @@ class MyApp extends StatelessWidget {
 
   MedListModel _provideListModel(MedListState initState) {
     final model = MedListModel(initState);
-    model.fetchMedList();
+    model.init();
     return model;
   }
 }

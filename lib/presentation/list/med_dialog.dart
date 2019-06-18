@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jaap/data/dto/meditation.dart';
+import 'package:jaap/presentation/detail/med_detail_page.dart';
 
 class MedDialog extends StatelessWidget {
   final Meditation med;
@@ -42,7 +43,7 @@ class MedDialog extends StatelessWidget {
                       child: RaisedButton(
                         child: Text("Play"),
                         onPressed: () {
-                          print("play pressed");
+                          Navigator.pushNamed(context, MedDetailPage.ROUTE_NAME, arguments: med);
                         },
                       ),
                     )))
