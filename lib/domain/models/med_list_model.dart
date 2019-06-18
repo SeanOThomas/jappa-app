@@ -19,5 +19,9 @@ class MedListModel<MedListState> extends BaseModel {
     } else {
       setState(Error);
     }
+
+//    File file = File("NA");
+//    AudioPlayer audioPlayer = AudioPlayer();
+//    audioPlayer.play(file.path, isLocal: true);
   }
 }

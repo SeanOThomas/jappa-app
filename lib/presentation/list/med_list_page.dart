@@ -12,20 +12,13 @@ class MedListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<MedListModel>(
-      builder: (context){
-        final model = MedListModel(Loading());
-        model.fetchMedList();
-        return model;
-      },
-      child: Consumer<MedListModel>(
-        builder: (context, model, _) => _getWidget(model),
-      ),
-    );
+    final model = Provider.of<MedListModel>(context);
+    return _getWidget(model);
   }
 
   Widget _getWidget(MedListModel model) {
     switch(model.state) {
+      case ResultsWithAudio:
       case Results: {
         return MedListResults(model.medList.meditations);
       }

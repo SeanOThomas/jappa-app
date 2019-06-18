@@ -34,10 +34,10 @@ class RemoteService {
         if (medListLocal.version == medList.version) {
           print('remote version is the same, no audio to fetch');
         } else if (medListLocal.version[0] == medList.version[0]) {
-          print('versions are different, fetch audio without intro');
+          print('version decimal is different, fetch audio without intro');
           _fetchAudio(medList);
         } else {
-          print('versions are different, fetch all audio');
+          print('version integer is different, fetch all audio');
           _fetchAudio(medList, _fetchIntroMed());
         }
       } else {

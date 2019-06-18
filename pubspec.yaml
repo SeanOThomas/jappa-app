@@ -25,10 +25,11 @@ dependencies:
   cupertino_icons: ^0.1.2
 
   cloud_firestore: ^0.12.5
-  provider: ^2.0.1+1
   firebase_storage: ^3.0.1
   path_provider: ^1.1.0
   shared_preferences: ^0.5.3+1
+  audioplayer: ^0.5.2
+  provider: ^3.0.0
 
 dev_dependencies:
   flutter_test:
