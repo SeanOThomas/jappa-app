@@ -4,10 +4,12 @@ import 'package:jaap/data/dto/meditation_list.dart';
 
 import '../data_constants.dart';
 import '../data_util.dart';
+import 'local_service.dart';
 
 class RemoteService {
   final _db = Firestore.instance;
   final _storage = FirebaseStorage.instance;
+  final _localService = LocalService();
 
   Future<DocumentSnapshot> fetchMeditationList() async =>
       _db.collection(DataConstants.MEDITATION_LIST).document(DataConstants.MEDITATION_LIST_DOC_ID).get();
@@ -38,7 +40,7 @@ class RemoteService {
   Future<void> fetchFile(String fileName) async {
     StorageReference ref = _storage.ref().child(fileName);
     print('fetching fileName: $fileName');
-    final storageFile = await DataUtil.getAppStorageFile(fileName);
+    final storageFile = await _localService.getAppStorageFile(fileName);
     StorageFileDownloadTask downloadTask = ref.writeToFile(storageFile);
     downloadTask.future.then((snap) {
       print("fetched $fileName with  byte count: ${snap.totalByteCount}");

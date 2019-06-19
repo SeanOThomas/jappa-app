@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:jaap/data/data_constants.dart';
+import 'package:jaap/data/data_util.dart';
 import 'package:jaap/data/dto/meditation_list.dart';
+import 'package:jaap/data/services/local_service.dart';
 import 'package:jaap/data/services/remote_service.dart';
 import 'package:jaap/domain/models/base_model.dart';
 import 'package:jaap/domain/state/med_list_state.dart';
@@ -12,6 +15,8 @@ class MedListModel<MedListState> extends BaseModel {
   MeditationList medList;
 
   final _remoteService = RemoteService();
+  final _localService = LocalService();
+  final _random = Random();
 
   MedListModel(state) : super(state);
 
@@ -52,18 +57,18 @@ class MedListModel<MedListState> extends BaseModel {
     });
   }
 
-
   Future<File> getIntro() {
-    return null;
+    return _localService.getAppStorageFile(DataUtil.getIntroMedFileName());
   }
 
   Future<File> getDescription(String medKey) {
-    return null;
+    return _localService.getAppStorageFile(DataUtil.getMedDescriptionFileName(medKey));
   }
 
-
-  Future<File> getReminder(String medKey) {
-    return null;
+  Future<File> getReminder(String medKey, int numMeditations) {
+    // pick random reminder
+    int remNum = 1 + _random.nextInt(numMeditations - 1);
+    return _localService.getAppStorageFile(DataUtil.getMedReminderFileName(medKey, remNum));
   }
 
 //    File file = File("NA");
