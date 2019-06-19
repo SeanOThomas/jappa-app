@@ -8,6 +8,7 @@ class BaseModel<T> with ChangeNotifier {
   BaseModel(this._state);
 
   void setState(T viewState) {
+    print("setting state: $viewState");
     _state = viewState;
     notifyListeners();
   }

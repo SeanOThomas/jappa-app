@@ -3,7 +3,6 @@ import 'package:jaap/presentation/detail/med_detail_page.dart';
 import 'package:jaap/presentation/list/med_list_page.dart';
 import 'package:provider/provider.dart';
 
-import 'data/dto/meditation.dart';
 import 'domain/models/med_list_model.dart';
 import 'domain/state/med_list_state.dart';
 

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:jaap/data/data_constants.dart';
 import 'package:jaap/data/dto/meditation_list.dart';
 import 'package:jaap/data/services/remote_service.dart';
 import 'package:jaap/domain/models/base_model.dart';
@@ -21,7 +23,7 @@ class MedListModel<MedListState> extends BaseModel {
       // determine what we should fetch based on remote version against
       // local version.
       final prefs = await SharedPreferences.getInstance();
-      final medListLocalJson = prefs.get(KEY_MED_LIST);
+      final medListLocalJson = prefs.get(DataConstants.KEY_MED_LIST);
       if (medListLocalJson != null) {
         final medListLocal = MeditationList.fromJson(json.decode(medListLocalJson));
         if (medListLocal.version == medList.version) {
@@ -45,9 +47,23 @@ class MedListModel<MedListState> extends BaseModel {
         });
       }
       // store remote med list
-      prefs.setString(KEY_MED_LIST, json.encode(snapshot.data));
+      prefs.setString(DataConstants.KEY_MED_LIST, json.encode(snapshot.data));
       return medList;
     });
+  }
+
+
+  Future<File> getIntro() {
+    return null;
+  }
+
+  Future<File> getDescription(String medKey) {
+    return null;
+  }
+
+
+  Future<File> getReminder(String medKey) {
+    return null;
   }
 
 //    File file = File("NA");
