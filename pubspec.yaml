@@ -28,7 +28,7 @@ dependencies:
   firebase_storage: ^3.0.1
   path_provider: ^1.1.0
   shared_preferences: ^0.5.3+1
-  audioplayer: ^0.5.2
+  audioplayers: ^0.12.1
   provider: ^3.0.0
 
 dev_dependencies:

@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
-import 'package:audioplayer/audioplayer.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jaap/data/dto/meditation.dart';
 import 'package:jaap/domain/models/med_list_model.dart';
@@ -24,39 +26,54 @@ class MedDetailPage extends StatefulWidget {
 class _MedDetailPageState extends State<MedDetailPage> {
 
   final Meditation med;
-  bool didPlayIntro = false;
-  bool didPlayDescription = false;
-  int numRemindersPlayed = 0;
-
   final audioPlayer = AudioPlayer();
-  Timer timer;
 
   _MedDetailPageState(this.med);
 
   @override
+  void initState() {
+    print("initState ${MedDetailPage.ROUTE_NAME}");
+
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    print("didChangeDependencies ${MedDetailPage.ROUTE_NAME}");
+
+    audioPlayer.onPlayerCompletion.listen((_){
+      final model = Provider.of<MedListModel>(context);
+      model.onAudioComplete();
+    });
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("build ${MedDetailPage.ROUTE_NAME}");
+
     final model = Provider.of<MedListModel>(context);
     return _getWidget(model);
   }
 
   Widget _getWidget(MedListModel model) {
-    switch (model.state) {
-      case ResultsWithAudio:
-        {
-          return Center(child: Text(MedDetailPage.ROUTE_NAME));
-        }
-      case Error:
-        {
-          return ErrorMessage();
-        }
-      default:
-        {
-          return LoadingSpinner();
-        }
-
+    print("_getWidget with ${model.state}");
+    if (model.state is PlayAudio) {
+      File audioFile = (model.state as PlayAudio).file;
+      audioPlayer.play(audioFile.path, isLocal: true);
+      return Scaffold(
+        body: Center(
+          child: Text("playing audio"),
+        ),
+      );
+    } else if (model.state.runtimeType is ResultsWithAudio) {
+      // only start once there's audio results (we could still be fetching on this screen)
+      model.onStartMed(med);
+      return LoadingSpinner();
+    } else if (model.state is Error) {
+      return ErrorMessage();
+    } else {
+      return LoadingSpinner();
     }
-  }
-  void playNextFile() {
-
   }
 }

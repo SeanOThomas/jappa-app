@@ -1,8 +1,27 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:jaap/data/dto/meditation_list.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../data_constants.dart';
 
 class LocalService {
+
+  Future<MeditationList> getMedList() async {
+    final prefs = await SharedPreferences.getInstance();
+    final medListLocalJson = prefs.get(DataConstants.KEY_MED_LIST);
+    if (medListLocalJson != null) {
+      return MeditationList.fromJson(json.decode(medListLocalJson));
+    }
+    return null;
+  }
+
+  void saveMedList(String medListJson) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(DataConstants.KEY_MED_LIST, medListJson);
+  }
 
   /// Gets a file in private app storage.
   ///

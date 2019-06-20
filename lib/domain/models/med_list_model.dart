@@ -2,35 +2,51 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:jaap/data/data_constants.dart';
 import 'package:jaap/data/data_util.dart';
+import 'package:jaap/data/dto/meditation.dart';
 import 'package:jaap/data/dto/meditation_list.dart';
 import 'package:jaap/data/services/local_service.dart';
 import 'package:jaap/data/services/remote_service.dart';
 import 'package:jaap/domain/models/base_model.dart';
 import 'package:jaap/domain/state/med_list_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MedListModel<MedListState> extends BaseModel {
-  MeditationList medList;
-
   final _remoteService = RemoteService();
   final _localService = LocalService();
   final _random = Random();
 
+  MeditationList medList;
+  Meditation audioMed;
+  AudioState audioState;
+
   MedListModel(state) : super(state);
+
+  void onStartMed(Meditation med) {
+    print("onStartMed");
+    audioMed = med;
+    _getIntro().then((file){
+      setState(PlayAudio(file));
+    });
+  }
+
+  void onAudioComplete() {
+    print("onAudioComplete");
+    if (audioState.didPlayDescription) {
+      // TODO: set timer to setState for reminder play
+    } else {
+      _getDescription(audioMed.key).then((file){
+        setState(PlayAudio(file));
+      });
+    }
+  }
 
   Future<MeditationList> init() async {
     return _remoteService.fetchMeditationList().then((snapshot) async {
       medList = MeditationList.fromJson(snapshot.data);
       setState(Results);
 
-      // determine what we should fetch based on remote version against
-      // local version.
-      final prefs = await SharedPreferences.getInstance();
-      final medListLocalJson = prefs.get(DataConstants.KEY_MED_LIST);
-      if (medListLocalJson != null) {
-        final medListLocal = MeditationList.fromJson(json.decode(medListLocalJson));
+      final medListLocal = await _localService.getMedList();
+      if (medListLocal != null) {
         if (medListLocal.version == medList.version) {
           print('remote version is the same, no audio to fetch');
           setState(ResultsWithAudio);
@@ -52,26 +68,21 @@ class MedListModel<MedListState> extends BaseModel {
         });
       }
       // store remote med list
-      prefs.setString(DataConstants.KEY_MED_LIST, json.encode(snapshot.data));
+      _localService.saveMedList(json.encode(snapshot.data));
       return medList;
     });
   }
 
-  Future<File> getIntro() {
+  Future<File> _getIntro() {
     return _localService.getAppStorageFile(DataUtil.getIntroMedFileName());
   }
 
-  Future<File> getDescription(String medKey) {
+  Future<File> _getDescription(String medKey) {
     return _localService.getAppStorageFile(DataUtil.getMedDescriptionFileName(medKey));
   }
 
-  Future<File> getReminder(String medKey, int numMeditations) {
-    // pick random reminder
+  Future<File> _getNextReminder(String medKey, int numMeditations) {
     int remNum = 1 + _random.nextInt(numMeditations - 1);
     return _localService.getAppStorageFile(DataUtil.getMedReminderFileName(medKey, remNum));
   }
-
-//    File file = File("NA");
-//    AudioPlayer audioPlayer = AudioPlayer();
-//    audioPlayer.play(file.path, isLocal: true);
 }
