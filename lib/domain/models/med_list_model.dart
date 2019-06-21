@@ -37,7 +37,7 @@ class MedListModel<MedListState> extends BaseModel {
   void onAudioComplete() {
     print("onAudioComplete");
     if (audioState.didPlayDescription) {
-      print("setting timer, num reminders: $audioState.numRemindersPlayed");
+      print("setting timer, num reminders: ${audioState.numRemindersPlayed}");
       if (audioState.numRemindersPlayed < NUM_ONE_MINUTE_REMINDERS) {
         // set timer for 1 minute
         reminderCountdown = Timer(Duration(minutes: 1), () {
@@ -112,7 +112,7 @@ class MedListModel<MedListState> extends BaseModel {
   }
 
   Future<File> _getNextReminder(String medKey, int numMeditations) {
-    int remNum = 1 + _random.nextInt(numMeditations - 1);
+    int remNum = 1 + _random.nextInt(numMeditations);
     return _localService.getAppStorageFile(DataUtil.getMedReminderFileName(medKey, remNum));
   }
 
