@@ -14,25 +14,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [ChangeNotifierProvider<MedListModel>.value(value: _provideListModel(Loading()))],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        initialRoute: MedListPage.ROUTE_NAME,
-        routes: {MedListPage.ROUTE_NAME: (_) => MedListPage(), MedDetailPage.ROUTE_NAME: (_) => MedDetailPage()},
-        onGenerateRoute: (settings) {
-          if (settings.name == MedDetailPage.ROUTE_NAME) {
-            return MaterialPageRoute(
-              builder: (context) {
-                return MedDetailPage(
-                  med: settings.arguments,
-                );
-              },
-            );
-          }
-        },
-      ),
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          initialRoute: MedListPage.ROUTE_NAME,
+          routes: {MedListPage.ROUTE_NAME: (_) => MedListPage(), MedDetailPage.ROUTE_NAME: (_) => MedDetailPage()}),
     );
   }
 

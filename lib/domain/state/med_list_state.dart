@@ -15,9 +15,6 @@ class PlayAudio extends MedListState {
 
 // mutable audio state
 class AudioState {
-  static int NUM_ONE_MINUTE_REMINDERS = 4;
-  static int NUM_TWO_MINUTE_REMINDERS = 3;
-
   bool didPlayDescription = false;
   int numRemindersPlayed = 0;
 }

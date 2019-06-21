@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -10,6 +11,9 @@ import 'package:jaap/data/services/remote_service.dart';
 import 'package:jaap/domain/models/base_model.dart';
 import 'package:jaap/domain/state/med_list_state.dart';
 
+const int NUM_ONE_MINUTE_REMINDERS = 4;
+const int NUM_TWO_MINUTE_REMINDERS = 3;
+
 class MedListModel<MedListState> extends BaseModel {
   final _remoteService = RemoteService();
   final _localService = LocalService();
@@ -18,14 +22,14 @@ class MedListModel<MedListState> extends BaseModel {
   MeditationList medList;
   Meditation audioMed;
   AudioState audioState;
+  Timer reminderCountdown;
 
   MedListModel(state) : super(state);
 
-  void onStartMed(Meditation med) {
+  void onStartMed() {
     print("onStartMed");
-    audioMed = med;
     audioState = AudioState();
-    _getIntro().then((file){
+    _getIntro().then((file) {
       setState(PlayAudio(file));
     });
   }
@@ -33,9 +37,34 @@ class MedListModel<MedListState> extends BaseModel {
   void onAudioComplete() {
     print("onAudioComplete");
     if (audioState.didPlayDescription) {
-      // TODO: set timer to setState for reminder play
+      print("setting timer, num reminders: $audioState.numRemindersPlayed");
+      if (audioState.numRemindersPlayed < NUM_ONE_MINUTE_REMINDERS) {
+        // set timer for 1 minute
+        reminderCountdown = Timer(Duration(minutes: 1), () {
+          _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
+            setState(PlayAudio(file));
+          });
+        });
+      } else if (audioState.numRemindersPlayed < NUM_TWO_MINUTE_REMINDERS) {
+        // set timer for 2 minutes
+        reminderCountdown = Timer(Duration(minutes: 2), () {
+          _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
+            setState(PlayAudio(file));
+          });
+        });
+      } else {
+        // set timer for 3 minutes
+        reminderCountdown = Timer(Duration(minutes: 3), () {
+          _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
+            setState(PlayAudio(file));
+          });
+        });
+      }
+      audioState.numRemindersPlayed += 1;
     } else {
-      _getDescription(audioMed.key).then((file){
+      // play description
+      audioState.didPlayDescription = true;
+      _getDescription(audioMed.key).then((file) {
         setState(PlayAudio(file));
       });
     }
@@ -85,5 +114,15 @@ class MedListModel<MedListState> extends BaseModel {
   Future<File> _getNextReminder(String medKey, int numMeditations) {
     int remNum = 1 + _random.nextInt(numMeditations - 1);
     return _localService.getAppStorageFile(DataUtil.getMedReminderFileName(medKey, remNum));
+  }
+
+  void onMedSelected(Meditation med) { audioMed = med; }
+
+  @override
+  void dispose() {
+    if (reminderCountdown != null) {
+      reminderCountdown.cancel();
+    }
+    super.dispose();
   }
 }
