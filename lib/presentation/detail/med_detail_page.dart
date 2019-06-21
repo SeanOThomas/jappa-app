@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -41,7 +40,7 @@ class _MedDetailPageState extends State<MedDetailPage> {
   void didChangeDependencies() {
     print("didChangeDependencies ${MedDetailPage.ROUTE_NAME}");
 
-    audioPlayer.onPlayerCompletion.listen((_){
+    audioPlayer.onPlayerCompletion.listen((_) {
       final model = Provider.of<MedListModel>(context);
       model.onAudioComplete();
     });
@@ -58,22 +57,29 @@ class _MedDetailPageState extends State<MedDetailPage> {
 
   Widget _getWidget(MedListModel model) {
     print("_getWidget with ${model.state}");
-    if (model.state is PlayAudio) {
-      File audioFile = (model.state as PlayAudio).file;
-      audioPlayer.play(audioFile.path, isLocal: true);
-      return Scaffold(
-        body: Center(
-          child: Text("playing audio"),
-        ),
-      );
-    } else if (model.state.runtimeType is ResultsWithAudio) {
-      // only start once there's audio results (we could still be fetching on this screen)
-      model.onStartMed(med);
-      return LoadingSpinner();
-    } else if (model.state is Error) {
-      return ErrorMessage();
-    } else {
-      return LoadingSpinner();
+    switch (model.state.runtimeType) {
+      case PlayAudio:
+        File audioFile = (model.state as PlayAudio).file;
+        audioPlayer.play(audioFile.path, isLocal: true);
+        return Scaffold(
+          body: Center(
+            child: Text("playing audio"),
+          ),
+        );
+      case ResultsWithAudio:
+        {
+          // only start once there's audio results (we could still be fetching on this screen)
+          model.onStartMed(med);
+          return LoadingSpinner();
+        }
+      case Error:
+        {
+          return ErrorMessage();
+        }
+      default:
+        {
+          return LoadingSpinner();
+        }
     }
   }
 }

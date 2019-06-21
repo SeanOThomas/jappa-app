@@ -17,7 +17,7 @@ class MedListPage extends StatelessWidget {
   }
 
   Widget _getWidget(MedListModel model) {
-    switch(model.state) {
+    switch(model.state.runtimeType) {
       case ResultsWithAudio:
       case Results: {
         return MedListResults(model.medList.meditations);

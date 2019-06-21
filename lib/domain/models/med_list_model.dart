@@ -24,6 +24,7 @@ class MedListModel<MedListState> extends BaseModel {
   void onStartMed(Meditation med) {
     print("onStartMed");
     audioMed = med;
+    audioState = AudioState();
     _getIntro().then((file){
       setState(PlayAudio(file));
     });
@@ -49,22 +50,22 @@ class MedListModel<MedListState> extends BaseModel {
       if (medListLocal != null) {
         if (medListLocal.version == medList.version) {
           print('remote version is the same, no audio to fetch');
-          setState(ResultsWithAudio);
+          setState(ResultsWithAudio());
         } else if (medListLocal.version[0] == medList.version[0]) {
           print('version decimal is different, fetch audio without intro');
           _remoteService.fetchAudio(medList).then((_) {
-            setState(ResultsWithAudio);
+            setState(ResultsWithAudio());
           });
         } else {
           print('version integer is different, fetch all audio');
           _remoteService.fetchAudio(medList, _remoteService.fetchIntroMed()).then((_) {
-            setState(ResultsWithAudio);
+            setState(ResultsWithAudio());
           });
         }
       } else {
         print('no saved med list, fetch all audio');
         _remoteService.fetchAudio(medList, _remoteService.fetchIntroMed()).then((_) {
-          setState(ResultsWithAudio);
+          setState(ResultsWithAudio());
         });
       }
       // store remote med list
