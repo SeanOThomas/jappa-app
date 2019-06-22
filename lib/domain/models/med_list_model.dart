@@ -38,6 +38,12 @@ class MedListModel<MedListState> extends BaseModel {
     print("onAudioComplete");
     if (audioState.didPlayDescription) {
       print("setting timer, num reminders: ${audioState.numRemindersPlayed}");
+      if (audioState.numRemindersPlayed == 0 ) {
+        // the description has just ended. start playing background noise
+        _getBackground(audioMed.key).then((file) {
+          setState(LoopBg(file));
+        });
+      }
       if (audioState.numRemindersPlayed < NUM_ONE_MINUTE_REMINDERS) {
         // set timer for 1 minute
         reminderCountdown = Timer(Duration(minutes: 1), () {
@@ -109,6 +115,10 @@ class MedListModel<MedListState> extends BaseModel {
 
   Future<File> _getDescription(String medKey) {
     return _localService.getAppStorageFile(DataUtil.getMedDescriptionFileName(medKey));
+  }
+
+  Future<File> _getBackground(String medKey) {
+    return _localService.getAppStorageFile(DataUtil.getMedBackgroundFileName(medKey));
   }
 
   Future<File> _getNextReminder(String medKey, int numMeditations) {

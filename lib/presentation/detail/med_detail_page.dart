@@ -19,6 +19,7 @@ class MedDetailPage extends StatefulWidget {
 
 class _MedDetailPageState extends State<MedDetailPage> {
   final audioPlayer = AudioPlayer();
+  final bgPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -28,6 +29,11 @@ class _MedDetailPageState extends State<MedDetailPage> {
       final model = Provider.of<MedListModel>(context);
       model.onAudioComplete();
     });
+
+    bgPlayer.onPlayerCompletion.listen((_) {
+      bgPlayer.seek(Duration()); // seek to the beginning to loop
+    });
+
     super.initState();
   }
 
@@ -42,6 +48,15 @@ class _MedDetailPageState extends State<MedDetailPage> {
   Widget _getWidget(MedListModel model) {
     print("_getWidget with ${model.state}");
     switch (model.state.runtimeType) {
+      case LoopBg: {
+        File audioFile = (model.state as LoopBg).file;
+        bgPlayer.play(audioFile.path, isLocal: true);
+        return Scaffold(
+          body: Center(
+            child: Text("playing ${audioFile.path}"),
+          ),
+        );
+      }
       case PlayAudio:
         File audioFile = (model.state as PlayAudio).file;
         audioPlayer.play(audioFile.path, isLocal: true);
@@ -70,6 +85,7 @@ class _MedDetailPageState extends State<MedDetailPage> {
   @override
   void dispose() {
     audioPlayer.stop();
+    bgPlayer.stop();
     super.dispose();
   }
 }

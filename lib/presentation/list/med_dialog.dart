@@ -45,6 +45,7 @@ class MedDialog extends StatelessWidget {
                       child: RaisedButton(
                         child: Text("Play"),
                         onPressed: () {
+                          Navigator.pop(context); // dismiss the dialog
                           Provider.of<MedListModel>(context).audioMed = med;
                           Navigator.pushNamed(context, MedDetailPage.ROUTE_NAME);
                         },

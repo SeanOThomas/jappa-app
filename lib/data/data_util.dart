@@ -10,6 +10,10 @@ class DataUtil {
     return _plusFileExt('$medKey/${DataConstants.FILE_NAME_DESCRIPTION}');
   }
 
+  static String getMedBackgroundFileName(String medKey) {
+    return _plusFileExt('$medKey/${DataConstants.FILE_NAME_BACKGROUND}');
+  }
+
   static String getMedReminderFileName(String medKey, int num) {
     return _plusFileExt('$medKey/${DataConstants.FILE_NAME_REMINDER}$num');
   }

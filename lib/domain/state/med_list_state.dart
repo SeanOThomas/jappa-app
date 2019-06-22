@@ -12,6 +12,10 @@ class PlayAudio extends MedListState {
   final File file;
   PlayAudio(this.file);
 }
+class LoopBg extends MedListState {
+  final File file;
+  LoopBg(this.file);
+}
 
 // mutable audio state
 class AudioState {
