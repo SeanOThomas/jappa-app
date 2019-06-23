@@ -18,6 +18,10 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.blue,
+
+            textTheme: TextTheme(
+              subtitle: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+            ),
           ),
           initialRoute: MedListPage.ROUTE_NAME,
           routes: {MedListPage.ROUTE_NAME: (_) => MedListPage(), MedDetailPage.ROUTE_NAME: (_) => MedDetailPage()}),

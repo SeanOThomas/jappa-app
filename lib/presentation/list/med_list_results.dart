@@ -4,6 +4,8 @@ import 'package:jaap/data/dto/meditation.dart';
 
 import 'med_dialog.dart';
 
+const LIST_PADDING = 28.0;
+
 class MedListResults extends StatelessWidget {
   final List<Meditation> meditations;
 
@@ -13,11 +15,20 @@ class MedListResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemBuilder: (context, index) => Card(
+        padding:  const EdgeInsets.all(LIST_PADDING),
+        itemBuilder: (context, index) =>
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: LIST_PADDING),
+            ),
+            Card(
               child: InkWell(
                   child: Padding(
-                    padding: const EdgeInsets.all(22.0),
-                    child: Text(meditations[index].title),
+                    padding: const EdgeInsets.all(LIST_PADDING),
+                    child: Text(meditations[index].title,
+                        style: Theme.of(context).textTheme.subtitle),
                   ),
                   onTap: () {
                     showDialog(
@@ -26,6 +37,8 @@ class MedListResults extends StatelessWidget {
                             MedDialog(meditations[index]));
                   }),
             ),
+          ],
+        ),
         itemCount: meditations.length,
       ),
     );
