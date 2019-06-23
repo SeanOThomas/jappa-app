@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../error_message.dart';
 import '../loading_spinner.dart';
+import 'med_detail_play.dart';
 
 class MedDetailPage extends StatefulWidget {
   static const ROUTE_NAME = '/detail';
@@ -26,13 +27,9 @@ class _MedDetailPageState extends State<MedDetailPage> {
     print("initState ${MedDetailPage.ROUTE_NAME}");
 
     audioPlayer.onPlayerCompletion.listen((_) {
-      final model = Provider.of<MedListModel>(context);
-      model.onAudioComplete();
+      Provider.of<MedListModel>(context).onAudioComplete();
     });
-
-    bgPlayer.onPlayerCompletion.listen((_) {
-      bgPlayer.seek(Duration()); // seek to the beginning to loop
-    });
+    bgPlayer.setReleaseMode(ReleaseMode.LOOP);
 
     super.initState();
   }
@@ -40,9 +37,7 @@ class _MedDetailPageState extends State<MedDetailPage> {
   @override
   Widget build(BuildContext context) {
     print("build ${MedDetailPage.ROUTE_NAME}");
-
-    final model = Provider.of<MedListModel>(context);
-    return _getWidget(model);
+    return _getWidget(Provider.of<MedListModel>(context));
   }
 
   Widget _getWidget(MedListModel model) {
@@ -51,20 +46,12 @@ class _MedDetailPageState extends State<MedDetailPage> {
       case LoopBg: {
         File audioFile = (model.state as LoopBg).file;
         bgPlayer.play(audioFile.path, isLocal: true);
-        return Scaffold(
-          body: Center(
-            child: Text("playing ${audioFile.path}"),
-          ),
-        );
+        return MedDetailPlay(audioFile.path);
       }
       case PlayAudio:
         File audioFile = (model.state as PlayAudio).file;
         audioPlayer.play(audioFile.path, isLocal: true);
-        return Scaffold(
-          body: Center(
-            child: Text("playing ${audioFile.path}"),
-          ),
-        );
+        return MedDetailPlay(audioFile.path);
       case ResultsWithAudio:
         {
           // only start once there's audio results (we could still be fetching on this screen)

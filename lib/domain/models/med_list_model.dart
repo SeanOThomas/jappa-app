@@ -128,6 +128,15 @@ class MedListModel<MedListState> extends BaseModel {
 
   void onMedSelected(Meditation med) { audioMed = med; }
 
+  void onCleanMed() {
+    audioMed = null;
+    audioState = AudioState();
+    if (reminderCountdown != null) {
+      reminderCountdown.cancel();
+    }
+    setStateQuietly(ResultsWithAudio());
+  }
+
   @override
   void dispose() {
     if (reminderCountdown != null) {

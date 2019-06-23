@@ -12,4 +12,9 @@ class BaseModel<T> with ChangeNotifier {
     _state = viewState;
     notifyListeners();
   }
+
+  void setStateQuietly(T viewState) {
+    print("setting state quietly: $viewState");
+    _state = viewState;
+  }
 }
