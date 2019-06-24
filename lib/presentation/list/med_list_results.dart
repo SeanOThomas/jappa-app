@@ -38,21 +38,8 @@ class MedListResults extends StatelessWidget {
                 Container(
                   height: 112.0,
                   decoration: BoxDecoration(
-                    gradient: new LinearGradient(
-                      colors: [
-                        index.isOdd ? Colors.orange : Colors.cyan,
-                        index.isOdd ? Colors.orangeAccent : Colors.cyanAccent
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(BORDER_RADIUS_DEFAULT),
-                    shape: BoxShape.rectangle,
-                    boxShadow: [
-                      new BoxShadow(
-                        color: Colors.grey,
-                        offset: new Offset(5.0, 5.0),
-                        blurRadius: 10.0,
-                      )
-                    ],
+                    color: orange,
+                    borderRadius: BorderRadius.circular(BORDER_RADIUS_LARGE),
                   ),
                   child: Material(
                     color: Colors.transparent,
