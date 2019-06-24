@@ -16,6 +16,7 @@ class MedListResults extends StatelessWidget {
       appBar: AppBar(
         title: Text("Japp"),
         centerTitle: true,
+        backgroundColor: green,
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
