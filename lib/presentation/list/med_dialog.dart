@@ -25,9 +25,7 @@ class MedDialog extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
                 shape: BoxShape.rectangle,
-                gradient: new LinearGradient(
-                  colors: [Colors.orange, Colors.orangeAccent],
-                ),
+                color: Color.fromRGBO(255,127,80, 0.9),
               ),
               child: Center(
                 child: Text(
@@ -45,19 +43,25 @@ class MedDialog extends StatelessWidget {
                 ),
               ),
             ),
-            Align(
-                alignment: Alignment.bottomCenter,
+            Padding(
+              padding: EdgeInsets.all(28.0),
+              child: FlatButton(
+                color: Color.fromRGBO(255,127,80, 0.12),
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 14),
-                  child: RaisedButton(
-                    child: Text("Play"),
-                    onPressed: () {
-                      Navigator.pop(context); // dismiss the dialog
-                      Provider.of<MedListModel>(context).audioMed = med;
-                      Navigator.pushNamed(context, MedDetailPage.ROUTE_NAME);
-                    },
+                  padding: const EdgeInsets.all(14.0),
+                  child: Text(
+                    "PLAY",
+                    style: Theme.of(context).textTheme.button,
                   ),
-                ))
+                ),
+                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                onPressed: () {
+                  Navigator.pop(context); // dismiss the dialog
+                  Provider.of<MedListModel>(context).audioMed = med;
+                  Navigator.pushNamed(context, MedDetailPage.ROUTE_NAME);
+                },
+              ),
+            )
           ],
         ),
       ),
