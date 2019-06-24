@@ -14,13 +14,16 @@ class MedListResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("japp"),
+      ),
       body: ListView.builder(
         padding: const EdgeInsets.all(LIST_PADDING),
         itemBuilder: (context, index) => Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(top: LIST_PADDING),
+                  padding: EdgeInsets.only(top: index == 0 ? 0 : LIST_PADDING),
                 ),
                 Container(
                   height: 112.0,
