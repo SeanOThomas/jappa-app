@@ -16,8 +16,32 @@ class MedDetailPlay extends StatelessWidget {
         Navigator.pop(context);
       },
       child: Scaffold(
-        body: Center(
-          child: Text("last played: $filePath")
+        body: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text("Vrindavan sounds"),
+                Switch(
+                  value: true,
+                  onChanged:(value) {
+                  },
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text("Reminders"),
+                Switch(
+                  value: true,
+                  onChanged:(value) {
+                  },
+                ),
+              ],
+            ),
+            Text("last played: $filePath")
+          ],
         ),
       ),
     );
