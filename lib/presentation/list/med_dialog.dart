@@ -13,44 +13,51 @@ class MedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: Container(
-        height: 350.0,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(14.0),
-              child: Text(
-                med.title,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+            Container(
+              height: 56,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
+                shape: BoxShape.rectangle,
+                gradient: new LinearGradient(
+                  colors: [Colors.orange, Colors.orangeAccent],
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  med.title,
+                  style: Theme.of(context).textTheme.subtitle,
                 ),
               ),
             ),
             Padding(
-                padding: EdgeInsets.all(14.0),
-                child: Text(
-                  med.description,
-                  style: TextStyle(
-                    fontSize: 18,
+              padding: const EdgeInsets.all(28.0),
+              child: Text(
+                med.description,
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 14),
+                  child: RaisedButton(
+                    child: Text("Play"),
+                    onPressed: () {
+                      Navigator.pop(context); // dismiss the dialog
+                      Provider.of<MedListModel>(context).audioMed = med;
+                      Navigator.pushNamed(context, MedDetailPage.ROUTE_NAME);
+                    },
                   ),
-                )),
-            Expanded(
-                child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 14),
-                      child: RaisedButton(
-                        child: Text("Play"),
-                        onPressed: () {
-                          Navigator.pop(context); // dismiss the dialog
-                          Provider.of<MedListModel>(context).audioMed = med;
-                          Navigator.pushNamed(context, MedDetailPage.ROUTE_NAME);
-                        },
-                      ),
-                    )))
+                ))
           ],
         ),
       ),
