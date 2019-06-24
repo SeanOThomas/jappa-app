@@ -15,7 +15,19 @@ class MedListResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("japp"),
+        title: Text("Japp"),
+        centerTitle: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {},
+            ),
+          )
+        ],
+        elevation: 8.0,
+
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(LIST_PADDING),
