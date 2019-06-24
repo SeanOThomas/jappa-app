@@ -23,10 +23,13 @@ class MedListResults extends StatelessWidget {
                   padding: const EdgeInsets.only(top: LIST_PADDING),
                 ),
                 Container(
-                  height: 116.0,
+                  height: 112.0,
                   decoration: BoxDecoration(
                     gradient: new LinearGradient(
-                      colors: [Colors.indigo, Colors.indigoAccent],
+                      colors: [
+                        index.isOdd ? Colors.orange : Colors.cyan,
+                        index.isOdd ? Colors.orangeAccent : Colors.cyanAccent
+                      ],
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                     shape: BoxShape.rectangle,
@@ -62,5 +65,9 @@ class MedListResults extends StatelessWidget {
         itemCount: meditations.length,
       ),
     );
+  }
+
+  bool isOddIndex(int index) {
+    return index.isOdd;
   }
 }
