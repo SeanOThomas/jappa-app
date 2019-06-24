@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
 
             textTheme: TextTheme(
-              subtitle: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+              subtitle: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
           initialRoute: MedListPage.ROUTE_NAME,
