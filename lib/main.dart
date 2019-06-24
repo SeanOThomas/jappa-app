@@ -18,10 +18,12 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.indigo,
-
             textTheme: TextTheme(
-              subtitle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 2),
-              button: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.deepOrange, letterSpacing: 2),
+              subtitle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1),
+              button:
+                  TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.deepOrange, letterSpacing: 2),
+              body1: TextStyle(
+                  fontSize: 16.0, fontWeight: FontWeight.normal, color: Colors.blueGrey, letterSpacing: 1, height: 1.5),
             ),
           ),
           initialRoute: MedListPage.ROUTE_NAME,

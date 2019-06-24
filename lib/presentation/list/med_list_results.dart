@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jaap/data/dto/meditation.dart';
 
+import '../styles.dart';
 import 'med_dialog.dart';
-
-const LIST_PADDING = 28.0;
 
 class MedListResults extends StatelessWidget {
   final List<Meditation> meditations;
@@ -27,15 +26,14 @@ class MedListResults extends StatelessWidget {
           )
         ],
         elevation: 8.0,
-
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(LIST_PADDING),
+        padding: const EdgeInsets.all(PADDING_DEFAULT),
         itemBuilder: (context, index) => Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top: index == 0 ? 0 : LIST_PADDING),
+                  padding: EdgeInsets.only(top: index == 0 ? 0 : PADDING_DEFAULT),
                 ),
                 Container(
                   height: 112.0,
@@ -46,7 +44,7 @@ class MedListResults extends StatelessWidget {
                         index.isOdd ? Colors.orangeAccent : Colors.cyanAccent
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(BORDER_RADIUS_DEFAULT),
                     shape: BoxShape.rectangle,
                     boxShadow: [
                       new BoxShadow(
@@ -65,7 +63,7 @@ class MedListResults extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: LIST_PADDING, right: LIST_PADDING),
+                          padding: const EdgeInsets.symmetric(horizontal: PADDING_DEFAULT),
                           child: Text(
                             meditations[index].title,
                             style: Theme.of(context).textTheme.subtitle,
@@ -80,9 +78,5 @@ class MedListResults extends StatelessWidget {
         itemCount: meditations.length,
       ),
     );
-  }
-
-  bool isOddIndex(int index) {
-    return index.isOdd;
   }
 }

@@ -5,6 +5,8 @@ import 'package:jaap/domain/models/med_list_model.dart';
 import 'package:jaap/presentation/detail/med_detail_page.dart';
 import 'package:provider/provider.dart';
 
+import '../styles.dart';
+
 class MedDialog extends StatelessWidget {
   final Meditation med;
 
@@ -13,9 +15,9 @@ class MedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(BORDER_RADIUS_DEFAULT)),
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(BORDER_RADIUS_DEFAULT)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -23,9 +25,10 @@ class MedDialog extends StatelessWidget {
             Container(
               height: 56,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(BORDER_RADIUS_DEFAULT), topRight: Radius.circular(BORDER_RADIUS_DEFAULT)),
                 shape: BoxShape.rectangle,
-                color: Color.fromRGBO(255,127,80, 0.9),
+                color: orange,
               ),
               child: Center(
                 child: Text(
@@ -35,18 +38,15 @@ class MedDialog extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(28.0),
+              padding: const EdgeInsets.all(PADDING_DEFAULT),
               child: Text(
-                med.description,
-                style: TextStyle(
-                  fontSize: 18,
-                ),
+                med.description, textAlign: TextAlign.center,
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(28.0),
+              padding: EdgeInsets.all(PADDING_DEFAULT),
               child: FlatButton(
-                color: Color.fromRGBO(255,127,80, 0.12),
+                color: orangeOpaque,
                 child: Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: Text(
