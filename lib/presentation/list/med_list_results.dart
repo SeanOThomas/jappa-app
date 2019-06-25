@@ -37,7 +37,7 @@ class MedListResults extends StatelessWidget {
                   padding: EdgeInsets.only(top: index == 0 ? 0 : PADDING_DEFAULT),
                 ),
                 Container(
-                  height: 112.0,
+                  height: 108.0,
                   decoration: BoxDecoration(
                     color: orange,
                     borderRadius: BorderRadius.circular(BORDER_RADIUS_LARGE),

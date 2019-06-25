@@ -46,12 +46,22 @@ class _MedDetailPageState extends State<MedDetailPage> {
       case LoopBg: {
         File audioFile = (model.state as LoopBg).file;
         bgPlayer.play(audioFile.path, isLocal: true);
-        return MedDetailPlay(audioFile.path);
+        return MedDetailPlay(model.audioMed);
       }
       case PlayAudio:
         File audioFile = (model.state as PlayAudio).file;
         audioPlayer.play(audioFile.path, isLocal: true);
-        return MedDetailPlay(audioFile.path);
+        return MedDetailPlay(model.audioMed);
+      case ResumeAudio: {
+        audioPlayer.resume();
+        bgPlayer.resume();
+        return MedDetailPlay(model.audioMed);
+      }
+      case PauseAudio: {
+        audioPlayer.pause();
+        bgPlayer.pause();
+        return MedDetailPlay(model.audioMed, false);
+      }
       case ResultsWithAudio:
         {
           // only start once there's audio results (we could still be fetching on this screen)

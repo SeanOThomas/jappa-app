@@ -34,42 +34,36 @@ class MedListModel<MedListState> extends BaseModel {
     });
   }
 
+  void onPause() {
+    if (reminderCountdown != null && reminderCountdown.isActive) {
+      reminderCountdown.cancel();
+    }
+    setState(PauseAudio());
+  }
+
+  void onResume() {
+    if (audioState.didCompleteDescription) {
+      _setTimer();
+    }
+    setState(ResumeAudio());
+  }
+
   void onAudioComplete() {
     print("onAudioComplete");
-    if (audioState.didPlayDescription) {
+    if (audioState.didStartDescription) {
       print("setting timer, num reminders: ${audioState.numRemindersPlayed}");
-      if (audioState.numRemindersPlayed == 0 ) {
+      if (audioState.numRemindersPlayed == 0) {
+        audioState.didCompleteDescription = true;
         // the description has just ended. start playing background noise
         _getBackground(audioMed.key).then((file) {
           setState(LoopBg(file));
         });
       }
-      if (audioState.numRemindersPlayed < NUM_ONE_MINUTE_REMINDERS) {
-        // set timer for 1 minute
-        reminderCountdown = Timer(Duration(minutes: 1), () {
-          _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
-            setState(PlayAudio(file));
-          });
-        });
-      } else if (audioState.numRemindersPlayed < NUM_TWO_MINUTE_REMINDERS) {
-        // set timer for 2 minutes
-        reminderCountdown = Timer(Duration(minutes: 2), () {
-          _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
-            setState(PlayAudio(file));
-          });
-        });
-      } else {
-        // set timer for 3 minutes
-        reminderCountdown = Timer(Duration(minutes: 3), () {
-          _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
-            setState(PlayAudio(file));
-          });
-        });
-      }
+      _setTimer();
       audioState.numRemindersPlayed += 1;
     } else {
       // play description
-      audioState.didPlayDescription = true;
+      audioState.didStartDescription = true;
       _getDescription(audioMed.key).then((file) {
         setState(PlayAudio(file));
       });
@@ -109,6 +103,31 @@ class MedListModel<MedListState> extends BaseModel {
     });
   }
 
+  _setTimer() {
+    if (audioState.numRemindersPlayed < NUM_ONE_MINUTE_REMINDERS) {
+      // set timer for 1 minute
+      reminderCountdown = Timer(Duration(minutes: 1), () {
+        _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
+          setState(PlayAudio(file));
+        });
+      });
+    } else if (audioState.numRemindersPlayed < NUM_TWO_MINUTE_REMINDERS) {
+      // set timer for 2 minutes
+      reminderCountdown = Timer(Duration(minutes: 2), () {
+        _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
+          setState(PlayAudio(file));
+        });
+      });
+    } else {
+      // set timer for 3 minutes
+      reminderCountdown = Timer(Duration(minutes: 3), () {
+        _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
+          setState(PlayAudio(file));
+        });
+      });
+    }
+  }
+
   Future<File> _getIntro() {
     return _localService.getAppStorageFile(DataUtil.getIntroMedFileName());
   }
@@ -126,7 +145,9 @@ class MedListModel<MedListState> extends BaseModel {
     return _localService.getAppStorageFile(DataUtil.getMedReminderFileName(medKey, remNum));
   }
 
-  void onMedSelected(Meditation med) { audioMed = med; }
+  void onMedSelected(Meditation med) {
+    audioMed = med;
+  }
 
   void onCleanMed() {
     audioMed = null;
