@@ -44,9 +44,17 @@ class MedListModel<MedListState> extends BaseModel {
     setState(PlayerEvent());
   }
 
+  bool shouldResumeBg() {
+    return audioState.bgEnabled && audioState.didLoopBg;
+  }
+
   void onToggleBg() {
     audioState.bgEnabled = !audioState.bgEnabled;
     setState(PlayerEvent());
+
+    if (audioState.didCompleteDescription && !audioState.didLoopBg) {
+      _loopBackgroundIfEnabled();
+    }
   }
 
   void onTogglePause() {
@@ -71,11 +79,7 @@ class MedListModel<MedListState> extends BaseModel {
       if (audioState.numRemindersPlayed == 0) {
         audioState.didCompleteDescription = true;
         // the description has just ended. start playing background noise
-        if (audioState.bgEnabled) {
-          _getBackground(audioMed.key).then((file) {
-            setState(LoopBg(file));
-          });
-        }
+        _loopBackgroundIfEnabled();
       }
       _setReminderTimerIfEnabled();
     } else {
@@ -144,6 +148,15 @@ class MedListModel<MedListState> extends BaseModel {
         _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
           _playReminder(file);
         });
+      });
+    }
+  }
+
+  _loopBackgroundIfEnabled() {
+    if (audioState.bgEnabled) {
+      _getBackground(audioMed.key).then((file) {
+        audioState.didLoopBg = true;
+        setState(LoopBg(file));
       });
     }
   }

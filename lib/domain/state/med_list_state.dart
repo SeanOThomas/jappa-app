@@ -22,6 +22,7 @@ class PlayerEvent extends MedListState {}
 class AudioState {
   bool didStartDescription = false;
   bool didCompleteDescription = false;
+  bool didLoopBg = false;
   bool remindersEnabled = true;
   bool bgEnabled = true;
   bool isPaused = false;

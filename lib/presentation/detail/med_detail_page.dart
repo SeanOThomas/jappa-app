@@ -49,12 +49,12 @@ class _MedDetailPageState extends State<MedDetailPage> {
             audioPlayer.pause();
             bgPlayer.pause();
           } else {
-            audioPlayer.resume();
-            if (model.audioState.bgEnabled) {
-              bgPlayer.resume();
+            if (audioPlayer.state == AudioPlayerState.PAUSED || audioPlayer.state == AudioPlayerState.PLAYING) {
+              // don't play if completed or stopped.
+              audioPlayer.resume();
             }
+            model.shouldResumeBg() ? bgPlayer.resume() : bgPlayer.pause();
           }
-          model.audioState.bgEnabled ? bgPlayer.pause() : bgPlayer.resume();
           return MedDetailPlay();
         }
       case LoopBg:
