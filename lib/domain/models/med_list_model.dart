@@ -34,18 +34,34 @@ class MedListModel<MedListState> extends BaseModel {
     });
   }
 
-  void onPause() {
-    if (reminderCountdown != null && reminderCountdown.isActive) {
+  void onToggleReminders() {
+    audioState.remindersEnabled = !audioState.remindersEnabled;
+    if (audioState.remindersEnabled && audioState.didCompleteDescription) {
+      _setTimer();
+    } else if (reminderCountdown != null && reminderCountdown.isActive) {
       reminderCountdown.cancel();
     }
-    setState(PauseAudio());
+    setState(PlayerEvent());
   }
 
-  void onResume() {
-    if (audioState.didCompleteDescription) {
-      _setTimer();
+  void onToggleBg() {
+    audioState.bgEnabled = !audioState.bgEnabled;
+    setState(PlayerEvent());
+  }
+
+  void onTogglePause() {
+    audioState.isPaused = !audioState.isPaused;
+    if (audioState.isPaused) {
+      if (reminderCountdown != null && reminderCountdown.isActive) {
+        reminderCountdown.cancel();
+      }
+    } else {
+      audioState.isPaused = false;
+      if (audioState.didCompleteDescription && audioState.remindersEnabled) {
+        _setTimer();
+      }
     }
-    setState(ResumeAudio());
+    setState(PlayerEvent());
   }
 
   void onAudioComplete() {
@@ -55,12 +71,16 @@ class MedListModel<MedListState> extends BaseModel {
       if (audioState.numRemindersPlayed == 0) {
         audioState.didCompleteDescription = true;
         // the description has just ended. start playing background noise
-        _getBackground(audioMed.key).then((file) {
-          setState(LoopBg(file));
-        });
+        if (audioState.bgEnabled) {
+          _getBackground(audioMed.key).then((file) {
+            setState(LoopBg(file));
+          });
+        }
       }
-      _setTimer();
-      audioState.numRemindersPlayed += 1;
+      if (audioState.remindersEnabled) {
+        _setTimer();
+        audioState.numRemindersPlayed += 1;
+      }
     } else {
       // play description
       audioState.didStartDescription = true;

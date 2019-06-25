@@ -16,12 +16,14 @@ class LoopBg extends MedListState {
   final File file;
   LoopBg(this.file);
 }
-class PauseAudio extends MedListState {}
-class ResumeAudio extends MedListState {}
+class PlayerEvent extends MedListState {}
 
 // mutable audio state
 class AudioState {
   bool didStartDescription = false;
   bool didCompleteDescription = false;
+  bool remindersEnabled = true;
+  bool bgEnabled = true;
+  bool isPaused = false;
   int numRemindersPlayed = 0;
 }

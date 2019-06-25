@@ -43,25 +43,30 @@ class _MedDetailPageState extends State<MedDetailPage> {
   Widget _getWidget(MedListModel model) {
     print("_getWidget with ${model.state}");
     switch (model.state.runtimeType) {
-      case LoopBg: {
-        File audioFile = (model.state as LoopBg).file;
-        bgPlayer.play(audioFile.path, isLocal: true);
-        return MedDetailPlay();
-      }
+      case PlayerEvent:
+        {
+          if (model.audioState.isPaused) {
+            audioPlayer.pause();
+            bgPlayer.pause();
+          } else {
+            audioPlayer.resume();
+            if (model.audioState.bgEnabled) {
+              bgPlayer.resume();
+            }
+          }
+          model.audioState.bgEnabled ? bgPlayer.pause() : bgPlayer.resume();
+          return MedDetailPlay();
+        }
+      case LoopBg:
+        {
+          File audioFile = (model.state as LoopBg).file;
+          bgPlayer.play(audioFile.path, isLocal: true);
+          return MedDetailPlay();
+        }
       case PlayAudio:
         File audioFile = (model.state as PlayAudio).file;
         audioPlayer.play(audioFile.path, isLocal: true);
         return MedDetailPlay();
-      case ResumeAudio: {
-        audioPlayer.resume();
-        bgPlayer.resume();
-        return MedDetailPlay();
-      }
-      case PauseAudio: {
-        audioPlayer.pause();
-        bgPlayer.pause();
-        return MedDetailPlay(false);
-      }
       case ResultsWithAudio:
         {
           // only start once there's audio results (we could still be fetching on this screen)

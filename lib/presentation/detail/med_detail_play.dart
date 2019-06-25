@@ -5,9 +5,6 @@ import 'package:provider/provider.dart';
 import '../styles.dart';
 
 class MedDetailPlay extends StatelessWidget {
-  final bool isPlaying;
-
-  const MedDetailPlay([this.isPlaying = true]);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +24,10 @@ class MedDetailPlay extends StatelessWidget {
                 children: <Widget>[
                   Text("Vrindavan sounds"),
                   Switch(
-                    value: true,
-                    onChanged: (value) {},
+                    value: model.audioState.bgEnabled,
+                    onChanged: (value) {
+                      model.onToggleBg();
+                    },
                   ),
                 ],
               ),
@@ -36,10 +35,12 @@ class MedDetailPlay extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Text("Reminders"),
+                Text("Focus reminders"),
                 Switch(
-                  value: true,
-                  onChanged: (value) {},
+                  value: model.audioState.remindersEnabled,
+                  onChanged: (value) {
+                    model.onToggleReminders();
+                  },
                 ),
               ],
             ),
@@ -68,9 +69,9 @@ class MedDetailPlay extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: FloatingActionButton(
-                      child: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                      child: Icon(model.audioState.isPaused ? Icons.play_arrow : Icons.pause),
                       onPressed: () {
-                        isPlaying ? model.onPause() : model.onResume();
+                        model.onTogglePause();
                       },
                     ),
                   )
