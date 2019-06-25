@@ -46,21 +46,21 @@ class _MedDetailPageState extends State<MedDetailPage> {
       case LoopBg: {
         File audioFile = (model.state as LoopBg).file;
         bgPlayer.play(audioFile.path, isLocal: true);
-        return MedDetailPlay(model.audioMed);
+        return MedDetailPlay();
       }
       case PlayAudio:
         File audioFile = (model.state as PlayAudio).file;
         audioPlayer.play(audioFile.path, isLocal: true);
-        return MedDetailPlay(model.audioMed);
+        return MedDetailPlay();
       case ResumeAudio: {
         audioPlayer.resume();
         bgPlayer.resume();
-        return MedDetailPlay(model.audioMed);
+        return MedDetailPlay();
       }
       case PauseAudio: {
         audioPlayer.pause();
         bgPlayer.pause();
-        return MedDetailPlay(model.audioMed, false);
+        return MedDetailPlay(false);
       }
       case ResultsWithAudio:
         {

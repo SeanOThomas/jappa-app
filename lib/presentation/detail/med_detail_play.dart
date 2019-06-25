@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:jaap/data/dto/meditation.dart';
 import 'package:jaap/domain/models/med_list_model.dart';
 import 'package:provider/provider.dart';
 
 import '../styles.dart';
 
 class MedDetailPlay extends StatelessWidget {
-  final Meditation med;
   final bool isPlaying;
 
-  const MedDetailPlay(this.med, [this.isPlaying = true]);
+  const MedDetailPlay([this.isPlaying = true]);
 
   @override
   Widget build(BuildContext context) {
+    final model = Provider.of<MedListModel>(context);
     return WillPopScope(
       onWillPop: () {
         Provider.of<MedListModel>(context).onCleanMed();
@@ -21,15 +20,18 @@ class MedDetailPlay extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Text("Vrindavan sounds"),
-                Switch(
-                  value: true,
-                  onChanged: (value) {},
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(top: PADDING_DEFAULT),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text("Vrindavan sounds"),
+                  Switch(
+                    value: true,
+                    onChanged: (value) {},
+                  ),
+                ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -47,7 +49,12 @@ class MedDetailPlay extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       Flexible(
-                        child: Container(),
+                        child: Container(
+                          child: Center(
+                            child: Text(model.audioMed.title,
+                                style: Theme.of(context).textTheme.display1),
+                          ),
+                        ),
                         flex: 1,
                       ),
                       Flexible(
@@ -63,7 +70,6 @@ class MedDetailPlay extends StatelessWidget {
                     child: FloatingActionButton(
                       child: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
                       onPressed: () {
-                        final model = Provider.of<MedListModel>(context);
                         isPlaying ? model.onPause() : model.onResume();
                       },
                     ),
