@@ -20,11 +20,36 @@ class PlayerEvent extends MedListState {}
 
 // mutable audio state
 class AudioState {
-  bool didStartDescription = false;
-  bool didCompleteDescription = false;
-  bool didLoopBg = false;
+  // paused state
+  bool isPlayerPaused = false;
+
+  // play (or paused) type
+  PlayType _playType = PlayType.NONE;
+  PlayType get playType => _playType;
+  set playType(PlayType playType) {
+    if (_playType == PlayType.DESC) {
+      _didFinishDesc = true;
+    }
+    _playType = playType;
+  }
+  bool _didFinishDesc = false;
+  bool get didFinishDesc => _didFinishDesc;
+
+  // reminders
   bool remindersEnabled = true;
-  bool bgEnabled = true;
-  bool isPaused = false;
   int numRemindersPlayed = 0;
+
+  // bg state
+  bool bgEnabled = true;
+  bool didStartLoopingBg = false;
+  bool shouldResumeBg() {
+    return bgEnabled && didStartLoopingBg;
+  }
+}
+
+enum PlayType {
+  INTRO,
+  DESC,
+  REM,
+  NONE
 }

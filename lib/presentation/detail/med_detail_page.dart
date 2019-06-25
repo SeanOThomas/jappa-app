@@ -27,7 +27,7 @@ class _MedDetailPageState extends State<MedDetailPage> {
     print("initState ${MedDetailPage.ROUTE_NAME}");
 
     audioPlayer.onPlayerCompletion.listen((_) {
-      Provider.of<MedListModel>(context).onAudioComplete();
+      Provider.of<MedListModel>(context).onAudioFinished();
     });
     bgPlayer.setReleaseMode(ReleaseMode.LOOP);
 
@@ -45,15 +45,20 @@ class _MedDetailPageState extends State<MedDetailPage> {
     switch (model.state.runtimeType) {
       case PlayerEvent:
         {
-          if (model.audioState.isPaused) {
-            audioPlayer.pause();
-            bgPlayer.pause();
+          if (model.audioState.isPlayerPaused) {
+            if (model.audioState.playType != PlayType.NONE) {
+              audioPlayer.pause();
+            }
+            if (model.audioState.didStartLoopingBg) {
+              bgPlayer.pause();
+            }
           } else {
-            if (audioPlayer.state == AudioPlayerState.PAUSED || audioPlayer.state == AudioPlayerState.PLAYING) {
-              // don't play if completed or stopped.
+            if (model.audioState.playType != PlayType.NONE) {
               audioPlayer.resume();
             }
-            model.shouldResumeBg() ? bgPlayer.resume() : bgPlayer.pause();
+            if (model.audioState.shouldResumeBg()) {
+              bgPlayer.resume();
+            }
           }
           return MedDetailPlay();
         }

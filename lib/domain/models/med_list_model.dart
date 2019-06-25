@@ -26,71 +26,8 @@ class MedListModel<MedListState> extends BaseModel {
 
   MedListModel(state) : super(state);
 
-  void onStartMed() {
-    print("onStartMed");
-    audioState = AudioState();
-    _getIntro().then((file) {
-      setState(PlayAudio(file));
-    });
-  }
-
-  void onToggleReminders() {
-    audioState.remindersEnabled = !audioState.remindersEnabled;
-    if (audioState.remindersEnabled && audioState.didCompleteDescription) {
-      _setReminderTimerIfEnabled();
-    } else if (reminderCountdown != null && reminderCountdown.isActive) {
-      reminderCountdown.cancel();
-    }
-    setState(PlayerEvent());
-  }
-
-  bool shouldResumeBg() {
-    return audioState.bgEnabled && audioState.didLoopBg;
-  }
-
-  void onToggleBg() {
-    audioState.bgEnabled = !audioState.bgEnabled;
-    setState(PlayerEvent());
-
-    if (audioState.didCompleteDescription && !audioState.didLoopBg) {
-      _loopBackgroundIfEnabled();
-    }
-  }
-
-  void onTogglePause() {
-    audioState.isPaused = !audioState.isPaused;
-    if (audioState.isPaused) {
-      if (reminderCountdown != null && reminderCountdown.isActive) {
-        reminderCountdown.cancel();
-      }
-    } else {
-      audioState.isPaused = false;
-      if (audioState.didCompleteDescription) {
-        // reset reminder timer
-        _setReminderTimerIfEnabled();
-      }
-    }
-    setState(PlayerEvent());
-  }
-
-  void onAudioComplete() {
-    print("onAudioComplete");
-    if (audioState.didStartDescription) {
-      if (audioState.numRemindersPlayed == 0) {
-        audioState.didCompleteDescription = true;
-        // the description has just ended. start playing background noise
-        _loopBackgroundIfEnabled();
-      }
-      _setReminderTimerIfEnabled();
-    } else {
-      // play description
-      audioState.didStartDescription = true;
-      _getDescription(audioMed.key).then((file) {
-        setState(PlayAudio(file));
-      });
-    }
-  }
-
+  /// Fetches meditation list from remote source, then fetches none, some, or all of
+  /// audio depending on versioning.
   Future<MeditationList> init() async {
     return _remoteService.fetchMeditationList().then((snapshot) async {
       medList = MeditationList.fromJson(snapshot.data);
@@ -124,6 +61,83 @@ class MedListModel<MedListState> extends BaseModel {
     });
   }
 
+  void onStartMed() {
+    audioState = AudioState();
+    _getIntro().then((file) {
+      // play intro
+      _playAudioFile(file, PlayType.INTRO);
+    });
+  }
+
+  void onToggleReminders() {
+    audioState.remindersEnabled = !audioState.remindersEnabled;
+    if (audioState.remindersEnabled && audioState.didFinishDesc) {
+      _setReminderTimerIfEnabled();
+    } else {
+      _cancelReminderTimer();
+    }
+    setState(PlayerEvent());
+  }
+
+  void onToggleBg() {
+    audioState.bgEnabled = !audioState.bgEnabled;
+    setState(PlayerEvent());
+
+    if (audioState.didFinishDesc && !audioState.didStartLoopingBg) {
+      _loopBackgroundIfEnabled();
+    }
+  }
+
+  void onTogglePause() {
+    audioState.isPlayerPaused = !audioState.isPlayerPaused;
+
+    if (audioState.isPlayerPaused) {
+      _cancelReminderTimer();
+    } else if (audioState.didFinishDesc) {
+      _setReminderTimerIfEnabled();
+    }
+    setState(PlayerEvent());
+  }
+
+  void onAudioFinished() {
+    final finishedState = audioState.playType;
+    print("finished playing: $finishedState");
+    audioState.playType = PlayType.NONE;
+    if (finishedState == PlayType.INTRO) {
+      // play description
+      _getDescription(audioMed.key).then((file) {
+        _playAudioFile(file, PlayType.DESC);
+      });
+    } else if (finishedState == PlayType.DESC) {
+      _loopBackgroundIfEnabled();
+      _setReminderTimerIfEnabled();
+    } else if (finishedState == PlayType.REM) {
+      _setReminderTimerIfEnabled();
+    }
+  }
+
+  void onMedSelected(Meditation med) {
+    audioMed = med;
+  }
+
+  void onCleanMed() {
+    audioMed = null;
+    audioState = AudioState();
+    if (reminderCountdown != null) {
+      reminderCountdown.cancel();
+    }
+    setStateQuietly(ResultsWithAudio());
+  }
+
+  _loopBackgroundIfEnabled() {
+    if (audioState.bgEnabled) {
+      _getBackground(audioMed.key).then((file) {
+        audioState.didStartLoopingBg = true;
+        setState(LoopBg(file));
+      });
+    }
+  }
+
   _setReminderTimerIfEnabled() {
     if (!audioState.remindersEnabled) {
       return;
@@ -152,18 +166,20 @@ class MedListModel<MedListState> extends BaseModel {
     }
   }
 
-  _loopBackgroundIfEnabled() {
-    if (audioState.bgEnabled) {
-      _getBackground(audioMed.key).then((file) {
-        audioState.didLoopBg = true;
-        setState(LoopBg(file));
-      });
-    }
-  }
-
   _playReminder(File file) {
     audioState.numRemindersPlayed += 1;
+    _playAudioFile(file, PlayType.REM);
+  }
+
+  _playAudioFile(File file, PlayType type) {
+    audioState.playType = type;
     setState(PlayAudio(file));
+  }
+
+  _cancelReminderTimer() {
+    if (reminderCountdown != null && reminderCountdown.isActive) {
+      reminderCountdown.cancel();
+    }
   }
 
   Future<File> _getIntro() {
@@ -183,24 +199,9 @@ class MedListModel<MedListState> extends BaseModel {
     return _localService.getAppStorageFile(DataUtil.getMedReminderFileName(medKey, remNum));
   }
 
-  void onMedSelected(Meditation med) {
-    audioMed = med;
-  }
-
-  void onCleanMed() {
-    audioMed = null;
-    audioState = AudioState();
-    if (reminderCountdown != null) {
-      reminderCountdown.cancel();
-    }
-    setStateQuietly(ResultsWithAudio());
-  }
-
   @override
   void dispose() {
-    if (reminderCountdown != null) {
-      reminderCountdown.cancel();
-    }
+    _cancelReminderTimer();
     super.dispose();
   }
 }

@@ -69,7 +69,7 @@ class MedDetailPlay extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: FloatingActionButton(
-                      child: Icon(model.audioState.isPaused ? Icons.play_arrow : Icons.pause),
+                      child: Icon(model.audioState.isPlayerPaused ? Icons.play_arrow : Icons.pause),
                       onPressed: () {
                         model.onTogglePause();
                       },
