@@ -37,7 +37,7 @@ class MedListModel<MedListState> extends BaseModel {
   void onToggleReminders() {
     audioState.remindersEnabled = !audioState.remindersEnabled;
     if (audioState.remindersEnabled && audioState.didCompleteDescription) {
-      _setTimer();
+      _setReminderTimerIfEnabled();
     } else if (reminderCountdown != null && reminderCountdown.isActive) {
       reminderCountdown.cancel();
     }
@@ -57,8 +57,9 @@ class MedListModel<MedListState> extends BaseModel {
       }
     } else {
       audioState.isPaused = false;
-      if (audioState.didCompleteDescription && audioState.remindersEnabled) {
-        _setTimer();
+      if (audioState.didCompleteDescription) {
+        // reset reminder timer
+        _setReminderTimerIfEnabled();
       }
     }
     setState(PlayerEvent());
@@ -67,7 +68,6 @@ class MedListModel<MedListState> extends BaseModel {
   void onAudioComplete() {
     print("onAudioComplete");
     if (audioState.didStartDescription) {
-      print("setting timer, num reminders: ${audioState.numRemindersPlayed}");
       if (audioState.numRemindersPlayed == 0) {
         audioState.didCompleteDescription = true;
         // the description has just ended. start playing background noise
@@ -77,10 +77,7 @@ class MedListModel<MedListState> extends BaseModel {
           });
         }
       }
-      if (audioState.remindersEnabled) {
-        _setTimer();
-        audioState.numRemindersPlayed += 1;
-      }
+      _setReminderTimerIfEnabled();
     } else {
       // play description
       audioState.didStartDescription = true;
@@ -123,29 +120,37 @@ class MedListModel<MedListState> extends BaseModel {
     });
   }
 
-  _setTimer() {
+  _setReminderTimerIfEnabled() {
+    if (!audioState.remindersEnabled) {
+      return;
+    }
     if (audioState.numRemindersPlayed < NUM_ONE_MINUTE_REMINDERS) {
       // set timer for 1 minute
       reminderCountdown = Timer(Duration(minutes: 1), () {
         _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
-          setState(PlayAudio(file));
+          _playReminder(file);
         });
       });
     } else if (audioState.numRemindersPlayed < NUM_TWO_MINUTE_REMINDERS) {
       // set timer for 2 minutes
       reminderCountdown = Timer(Duration(minutes: 2), () {
         _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
-          setState(PlayAudio(file));
+          _playReminder(file);
         });
       });
     } else {
       // set timer for 3 minutes
       reminderCountdown = Timer(Duration(minutes: 3), () {
         _getNextReminder(audioMed.key, audioMed.numReminders).then((file) {
-          setState(PlayAudio(file));
+          _playReminder(file);
         });
       });
     }
+  }
+
+  _playReminder(File file) {
+    audioState.numRemindersPlayed += 1;
+    setState(PlayAudio(file));
   }
 
   Future<File> _getIntro() {
