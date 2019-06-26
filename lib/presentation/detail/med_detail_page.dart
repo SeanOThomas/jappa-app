@@ -46,18 +46,16 @@ class _MedDetailPageState extends State<MedDetailPage> {
       case PlayerEvent:
         {
           if (model.audioState.isPlayerPaused) {
-            if (model.audioState.playType != PlayType.NONE) {
-              audioPlayer.pause();
-            }
-            if (model.audioState.didStartLoopingBg) {
-              bgPlayer.pause();
-            }
+            // paused
+            _updatePlayerStateIfLoaded(model, false);
+            _pauseBgIfDidStart(model);
           } else {
-            if (model.audioState.playType != PlayType.NONE) {
-              audioPlayer.resume();
-            }
+            // resumed
+            _updatePlayerStateIfLoaded(model, true);
             if (model.audioState.shouldResumeBg()) {
               bgPlayer.resume();
+            } else {
+              _pauseBgIfDidStart(model);
             }
           }
           return MedDetailPlay();
@@ -86,6 +84,18 @@ class _MedDetailPageState extends State<MedDetailPage> {
         {
           return LoadingSpinner();
         }
+    }
+  }
+
+  void _updatePlayerStateIfLoaded(MedListModel model, bool isResume) {
+    if (model.audioState.playType != PlayType.NONE) {
+      isResume ? audioPlayer.resume() : audioPlayer.pause();
+    }
+  }
+
+  void _pauseBgIfDidStart(MedListModel model) {
+    if (model.audioState.didStartLoopingBg) {
+      bgPlayer.pause();
     }
   }
 
