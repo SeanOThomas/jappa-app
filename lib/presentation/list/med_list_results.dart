@@ -16,16 +16,15 @@ class MedListResults extends StatelessWidget {
       appBar: AppBar(
         title: Text("Japp"),
         centerTitle: true,
-        backgroundColor: green,
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 12.0),
-            child: IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () {},
-            ),
-          )
-        ],
+//        actions: <Widget>[
+//          Padding(
+//            padding: const EdgeInsets.only(right: 12.0),
+//            child: IconButton(
+//              icon: Icon(Icons.settings),
+//              onPressed: () {},
+//            ),
+//          )
+//        ],
         elevation: 8.0,
       ),
       body: ListView.builder(
@@ -41,6 +40,13 @@ class MedListResults extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: orange,
                     borderRadius: BorderRadius.circular(BORDER_RADIUS_LARGE),
+                    boxShadow: [
+                      new BoxShadow(
+                        color: Colors.grey,
+                        offset: new Offset(5.0, 5.0),
+                        blurRadius: 10.0
+                      )
+                    ],
                   ),
                   child: Material(
                     color: Colors.transparent,
