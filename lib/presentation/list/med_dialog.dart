@@ -28,12 +28,17 @@ class MedDialog extends StatelessWidget {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(BORDER_RADIUS_DEFAULT), topRight: Radius.circular(BORDER_RADIUS_DEFAULT)),
                 shape: BoxShape.rectangle,
-                color: orange,
+                color: getTypeColor(med.type),
               ),
-              child: Center(
-                child: Text(
-                  med.title,
-                  style: Theme.of(context).textTheme.subtitle,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: PADDING_DEFAULT),
+                child: Center(
+                  child: Text(
+                    med.title,
+                    style: Theme.of(context).textTheme.subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
             ),

@@ -60,7 +60,7 @@ class MedDetailPlay extends StatelessWidget {
                       ),
                       Flexible(
                         child: Container(
-                          color: orange,
+                          color: getTypeColor(model.audioMed.type),
                         ),
                         flex: 1,
                       ),

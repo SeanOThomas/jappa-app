@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jaap/presentation/detail/med_detail_page.dart';
 import 'package:jaap/presentation/list/med_list_page.dart';
+import 'package:jaap/presentation/styles.dart';
 import 'package:provider/provider.dart';
 
 import 'domain/models/med_list_model.dart';
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
-            primarySwatch: Colors.teal,
+            primaryColor: primaryGreen,
+            accentColor: primaryGreen,
             textTheme: TextTheme(
                 subtitle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1),
                 button: TextStyle(

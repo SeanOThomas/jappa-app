@@ -14,7 +14,7 @@ class MedListResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Japp"),
+        title: Text("Jappa"),
         centerTitle: true,
 //        actions: <Widget>[
 //          Padding(
@@ -38,7 +38,7 @@ class MedListResults extends StatelessWidget {
                 Container(
                   height: 108.0,
                   decoration: BoxDecoration(
-                    color: orange,
+                    color: getTypeColor(meditations[index].type),
                     borderRadius: BorderRadius.circular(BORDER_RADIUS_LARGE),
                     boxShadow: [
                       new BoxShadow(
