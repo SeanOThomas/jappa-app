@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
             primaryColor: primaryGreen,
-            accentColor: primaryGreen,
+            accentColor: Colors.blueGrey,
             textTheme: TextTheme(
                 subtitle: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1),
                 button: TextStyle(

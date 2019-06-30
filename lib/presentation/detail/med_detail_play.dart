@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../styles.dart';
 
 class MedDetailPlay extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<MedListModel>(context);
@@ -20,17 +19,30 @@ class MedDetailPlay extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: PADDING_DEFAULT),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text("Vrindavan sounds"),
-                  Switch(
-                    value: model.audioState.bgEnabled,
-                    onChanged: (value) {
-                      model.onToggleBg();
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    color: Theme.of(context).accentColor,
+                    onPressed: () {
+                      Provider.of<MedListModel>(context).onCleanMed();
+                      Navigator.pop(context);
                     },
                   ),
                 ],
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text("Vrindavan sounds"),
+                Switch(
+                  value: model.audioState.bgEnabled,
+                  onChanged: (value) {
+                    model.onToggleBg();
+                  },
+                ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -52,8 +64,7 @@ class MedDetailPlay extends StatelessWidget {
                       Flexible(
                         child: Container(
                           child: Center(
-                            child: Text(model.audioMed.title,
-                                style: Theme.of(context).textTheme.display1),
+                            child: Text(model.audioMed.title, style: Theme.of(context).textTheme.display1),
                           ),
                         ),
                         flex: 1,

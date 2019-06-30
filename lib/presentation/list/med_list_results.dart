@@ -13,40 +13,29 @@ class MedListResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Jappa"),
-        centerTitle: true,
-//        actions: <Widget>[
-//          Padding(
-//            padding: const EdgeInsets.only(right: 12.0),
-//            child: IconButton(
-//              icon: Icon(Icons.settings),
-//              onPressed: () {},
-//            ),
-//          )
-//        ],
-        elevation: 8.0,
-      ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(PADDING_DEFAULT),
-        itemBuilder: (context, index) => Column(
+          padding: const EdgeInsets.all(PADDING_DEFAULT),
+          itemCount: meditations.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Image.asset("assets/images/logo_jappa.png", fit: BoxFit.fitHeight, height: 84),
+              );
+            }
+            index -= 1;
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top: index == 0 ? 0 : PADDING_DEFAULT),
+                  padding: EdgeInsets.only(top: index == 0 ? PADDING_DEFAULT : PADDING_DEFAULT),
                 ),
                 Container(
-                  height: 108.0,
+                  height: CARD_HEIGHT,
                   decoration: BoxDecoration(
                     color: getTypeColor(meditations[index].type),
                     borderRadius: BorderRadius.circular(BORDER_RADIUS_LARGE),
-                    boxShadow: [
-                      new BoxShadow(
-                        color: Colors.grey,
-                        offset: new Offset(5.0, 5.0),
-                        blurRadius: 10.0
-                      )
-                    ],
+                    boxShadow: [new BoxShadow(color: Colors.grey, offset: new Offset(5.0, 5.0), blurRadius: 10.0)],
                   ),
                   child: Material(
                     color: Colors.transparent,
@@ -68,9 +57,8 @@ class MedListResults extends StatelessWidget {
                   ),
                 )
               ],
-            ),
-        itemCount: meditations.length,
-      ),
+            );
+          }),
     );
   }
 }
