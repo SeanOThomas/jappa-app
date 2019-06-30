@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:jaap/data/dto/meditation.dart';
+import 'package:jappa/data/dto/meditation.dart';
 
 import '../styles.dart';
 import 'med_dialog.dart';

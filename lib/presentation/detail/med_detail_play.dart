@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jaap/domain/models/med_list_model.dart';
+import 'package:jappa/domain/models/med_list_model.dart';
 import 'package:provider/provider.dart';
 
 import '../styles.dart';
@@ -64,7 +64,10 @@ class MedDetailPlay extends StatelessWidget {
                       Flexible(
                         child: Container(
                           child: Center(
-                            child: Text(model.audioMed.title, style: Theme.of(context).textTheme.display1),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: PADDING_DEFAULT),
+                              child: Text(model.audioMed.title, style: Theme.of(context).textTheme.display1),
+                            ),
                           ),
                         ),
                         flex: 1,

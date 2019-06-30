@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:jaap/data/dto/meditation.dart';
-import 'package:jaap/domain/models/med_list_model.dart';
-import 'package:jaap/presentation/detail/med_detail_page.dart';
+import 'package:jappa/data/dto/meditation.dart';
+import 'package:jappa/domain/models/med_list_model.dart';
+import 'package:jappa/presentation/detail/med_detail_page.dart';
 import 'package:provider/provider.dart';
 
 import '../styles.dart';
@@ -43,9 +43,12 @@ class MedDialog extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(PADDING_DEFAULT),
+              padding: const EdgeInsets.all(PADDING_DEFAULT_SMALL),
               child: Text(
-                med.description, textAlign: TextAlign.center,
+                med.description,
+                textAlign: TextAlign.center,
+                maxLines: 10,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             Padding(

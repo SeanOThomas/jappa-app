@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jaap/presentation/detail/med_detail_page.dart';
-import 'package:jaap/presentation/list/med_list_page.dart';
-import 'package:jaap/presentation/styles.dart';
+import 'package:jappa/presentation/detail/med_detail_page.dart';
+import 'package:jappa/presentation/list/med_list_page.dart';
+import 'package:jappa/presentation/styles.dart';
 import 'package:provider/provider.dart';
 
 import 'domain/models/med_list_model.dart';
@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider<MedListModel>.value(value: _provideListModel(Loading()))],
+      providers: [ChangeNotifierProvider<MedListModel>.value(value: _provideListModel(Start()))],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'Jappa',
           theme: ThemeData(
             primaryColor: primaryGreen,
             accentColor: Colors.blueGrey,

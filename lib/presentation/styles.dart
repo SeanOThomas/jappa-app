@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 const PADDING_DEFAULT = 28.0;
+const PADDING_DEFAULT_SMALL = 16.0;
 const BORDER_RADIUS_DEFAULT = 8.0;
 const BORDER_RADIUS_LARGE = 12.0;
 

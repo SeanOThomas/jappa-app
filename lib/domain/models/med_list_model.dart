@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:jaap/data/data_util.dart';
-import 'package:jaap/data/dto/meditation.dart';
-import 'package:jaap/data/dto/meditation_list.dart';
-import 'package:jaap/data/services/local_service.dart';
-import 'package:jaap/data/services/remote_service.dart';
-import 'package:jaap/domain/models/base_model.dart';
-import 'package:jaap/domain/state/med_list_state.dart';
+import 'package:jappa/data/data_util.dart';
+import 'package:jappa/data/dto/meditation.dart';
+import 'package:jappa/data/dto/meditation_list.dart';
+import 'package:jappa/data/services/local_service.dart';
+import 'package:jappa/data/services/remote_service.dart';
+import 'package:jappa/domain/models/base_model.dart';
+import 'package:jappa/domain/state/med_list_state.dart';
 
 const int NUM_ONE_MINUTE_REMINDERS = 4;
 const int NUM_TWO_MINUTE_REMINDERS = 3;

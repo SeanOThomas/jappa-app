@@ -2,6 +2,7 @@ import 'dart:io';
 
 // fetching state
 abstract class MedListState {}
+class Start extends MedListState {}
 class Loading extends MedListState {}
 class Results extends MedListState {}
 class ResultsWithAudio extends MedListState {}

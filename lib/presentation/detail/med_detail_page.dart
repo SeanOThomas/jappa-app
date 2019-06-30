@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:jaap/domain/models/med_list_model.dart';
-import 'package:jaap/domain/state/med_list_state.dart';
+import 'package:jappa/domain/models/med_list_model.dart';
+import 'package:jappa/domain/state/med_list_state.dart';
 import 'package:provider/provider.dart';
 
 import '../error_message.dart';
