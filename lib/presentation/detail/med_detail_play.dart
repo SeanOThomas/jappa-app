@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jappa/domain/models/med_list_model.dart';
+import 'package:jappa/domain/state/med_list_state.dart';
 import 'package:provider/provider.dart';
 
 import '../styles.dart';
@@ -75,6 +76,7 @@ class MedDetailPlay extends StatelessWidget {
                       Flexible(
                         child: Container(
                           color: getTypeColor(model.audioMed.type),
+                          child: Center(child: _skipButtonIfNecessary(context, model.audioState.playType)),
                         ),
                         flex: 1,
                       ),
@@ -88,7 +90,7 @@ class MedDetailPlay extends StatelessWidget {
                         model.onTogglePause();
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
             )
@@ -96,5 +98,23 @@ class MedDetailPlay extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _skipButtonIfNecessary(BuildContext context, PlayType playType) {
+    if (playType == PlayType.DESC) {
+      return FlatButton(
+        child: Padding(
+          padding: const EdgeInsets.all(14.0),
+          child: Text(
+            "Skip Description",
+            style: TextStyle(color: Theme.of(context).primaryColor, fontStyle: FontStyle.italic, fontSize: 18),
+          ),
+        ),
+        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+        onPressed: () {},
+      );
+    } else {
+      return Scaffold();
+    }
   }
 }
