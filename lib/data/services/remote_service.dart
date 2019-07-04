@@ -15,17 +15,20 @@ class RemoteService {
       _db.collection(DataConstants.MEDITATION_LIST).document(DataConstants.MEDITATION_LIST_DOC_ID).get();
 
   Future<void> fetchIntroMed() => fetchFile(DataUtil.getIntroMedFileName());
+  Future<void> fetchBgSounds() => fetchFile(DataUtil.getBackgroundFileName());
 
-  Future<List<void>> fetchAudio(MeditationList meditationList, [Future<void> introMedFuture]) async {
+
+  Future<List<void>> fetchAudio(MeditationList meditationList, [bool fetchAll = false]) async {
     final futures = List<Future<void>>();
-    if (introMedFuture != null) {
+    if (fetchAll) {
       // eg "intro_med.mp3"
-      futures.add(introMedFuture);
+      futures
+        ..add(fetchIntroMed())
+        ..add(fetchBgSounds());
     }
     for (final m in meditationList.meditations) {
       // eg "1/desc.mp3"
       futures.add(fetchFile(DataUtil.getMedDescriptionFileName(m.key)));
-      futures.add(fetchFile(DataUtil.getMedBackgroundFileName(m.key)));
       for (var i = 1; i <= m.numReminders; i++) {
         // eg "1/rem3.mp3
         futures.add(fetchFile(DataUtil.getMedReminderFileName(m.key, i)));

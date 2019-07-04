@@ -45,13 +45,13 @@ class MedListModel<MedListState> extends BaseModel {
           });
         } else {
           print('version integer is different, fetch all audio');
-          _remoteService.fetchAudio(medList, _remoteService.fetchIntroMed()).then((_) {
+          _remoteService.fetchAudio(medList, true).then((_) {
             setState(ResultsWithAudio());
           });
         }
       } else {
         print('no saved med list, fetch all audio');
-        _remoteService.fetchAudio(medList, _remoteService.fetchIntroMed()).then((_) {
+        _remoteService.fetchAudio(medList, true).then((_) {
           setState(ResultsWithAudio());
         });
       }
@@ -191,7 +191,7 @@ class MedListModel<MedListState> extends BaseModel {
   }
 
   Future<File> _getBackground(String medKey) {
-    return _localService.getAppStorageFile(DataUtil.getMedBackgroundFileName(medKey));
+    return _localService.getAppStorageFile(DataUtil.getBackgroundFileName());
   }
 
   Future<File> _getNextReminder(String medKey, int numMeditations) {
