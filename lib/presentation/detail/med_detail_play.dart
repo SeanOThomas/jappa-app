@@ -113,7 +113,7 @@ class MedDetailPlay extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(14.0),
           child: Text(
-            playType == PlayType.INTRO  ? "Skip Intro" : "SKip Description",
+            playType == PlayType.INTRO  ? "Skip Intro" : "Skip Description",
             style: TextStyle(color: Theme.of(context).primaryColor, fontStyle: FontStyle.italic, fontSize: 18),
           ),
         ),
