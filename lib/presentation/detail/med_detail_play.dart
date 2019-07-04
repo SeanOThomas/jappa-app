@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:jappa/domain/models/med_list_model.dart';
 import 'package:jappa/domain/state/med_list_state.dart';
@@ -6,6 +7,11 @@ import 'package:provider/provider.dart';
 import '../styles.dart';
 
 class MedDetailPlay extends StatelessWidget {
+
+  final AudioPlayer audioPlayer;
+
+  const MedDetailPlay({Key key, this.audioPlayer}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<MedListModel>(context);
@@ -76,7 +82,7 @@ class MedDetailPlay extends StatelessWidget {
                       Flexible(
                         child: Container(
                           color: getTypeColor(model.audioMed.type),
-                          child: Center(child: _skipButtonIfNecessary(context, model.audioState.playType)),
+                          child: Center(child: _skipButtonIfNecessary(context, model)),
                         ),
                         flex: 1,
                       ),
@@ -100,21 +106,27 @@ class MedDetailPlay extends StatelessWidget {
     );
   }
 
-  Widget _skipButtonIfNecessary(BuildContext context, PlayType playType) {
-    if (playType == PlayType.DESC) {
+  Widget _skipButtonIfNecessary(BuildContext context, MedListModel model) {
+    var playType = model.audioState.playType;
+    if (playType == PlayType.INTRO || playType == PlayType.DESC) {
       return FlatButton(
         child: Padding(
           padding: const EdgeInsets.all(14.0),
           child: Text(
-            "Skip Description",
+            playType == PlayType.INTRO  ? "Skip Intro" : "SKip Description",
             style: TextStyle(color: Theme.of(context).primaryColor, fontStyle: FontStyle.italic, fontSize: 18),
           ),
         ),
         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-        onPressed: () {},
+        onPressed: () {
+          audioPlayer.seek(Duration(days: 1)); // this effectively skips the track
+          if (model.audioState.isPlayerPaused) {
+            model.onTogglePause();
+          }
+        },
       );
     } else {
-      return Scaffold();
+      return Text(""); // return an empty view
     }
   }
 }

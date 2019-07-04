@@ -58,7 +58,7 @@ class _MedDetailPageState extends State<MedDetailPage> {
               _pauseBgIfDidStart(model);
             }
           }
-          return MedDetailPlay();
+          return MedDetailPlay(audioPlayer: audioPlayer);
         }
       case LoopBg:
         {
@@ -69,7 +69,7 @@ class _MedDetailPageState extends State<MedDetailPage> {
       case PlayAudio:
         File audioFile = (model.state as PlayAudio).file;
         audioPlayer.play(audioFile.path, isLocal: true);
-        return MedDetailPlay();
+        return MedDetailPlay(audioPlayer: audioPlayer);
       case ResultsWithAudio:
         {
           // only start once there's audio results (we could still be fetching on this screen)
